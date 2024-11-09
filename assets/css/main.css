@@ -1,0 +1,7 @@
+#map {
+  position: fixed !important;
+  top: 0 !important;
+  right: 0 !important;
+  width: 80% !important;
+  height: 100vh !important;
+}

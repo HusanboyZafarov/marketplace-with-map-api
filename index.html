@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Yandex Interaktiv Xarita - Hover Effekt</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="./assets/css/main.css" />
+    <script
+      src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey=1d006e2f-0e8f-4328-a07d-9c7c2afaa4ca"
+      type="text/javascript"
+    ></script>
+    <style>
+      .hover-block {
+        display: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+        padding: 10px;
+        background: white;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        max-width: 200px;
+        z-index: 1000;
+      }
+    </style>
+    <script>
+      ymaps.ready(init);
+      function init() {
+        var myMap = new ymaps.Map("map", {
+          center: [40.78339, 72.350664], // Markaziy koordinatalar
+          zoom: 10,
+        });
+
+        var uniqueId = "placemark-123";
+        var hoverBlock = document.createElement("div");
+        hoverBlock.id = uniqueId;
+        hoverBlock.className = "hover-block";
+        hoverBlock.innerHTML =
+          "<strong>Fayz Market</strong><br>" +
+          "<span style='color: #ffcc00;'>★★★★☆</span> 4.3 (54 ta baho)<br>" +
+          "Ish vaqti ko'rsatilmagan &middot; Mahalla do'koni<br>" +
+          "Andijon, mahalliy xiyobon, O'zbekiston<br>" +
+          "<button style='margin-top: 5px; padding: 5px 10px; background-color: #007bff; color: white; border: none; border-radius: 3px;'>Marshrut</button>";
+        document.body.appendChild(hoverBlock);
+
+        // Maxsus marker (Placemark) yaratish
+        var myPlacemark = new ymaps.Placemark(
+          [40.78339, 72.350664],
+          {
+            hintContent: "Bu joy haqida qisqa ma'lumot",
+          },
+          {
+            iconLayout: "default#image",
+            iconImageHref:
+              "https://mprivate-assets.netlify.app/imgs/icons-map/house.svg", // Rasm URL
+            iconImageSize: [30, 30],
+            iconImageOffset: [-15, -15],
+          }
+        );
+
+        myPlacemark.events.add("mouseenter", function (e) {
+          var position = myMap.converter.pageToGlobal(
+            myMap.converter.globalToPage(myPlacemark.geometry.getCoordinates())
+          );
+          var element = document.getElementById(uniqueId);
+          element.style.left = position[0] + "px";
+          element.style.top = position[1] + "px";
+          element.style.display = "block";
+        });
+
+        myPlacemark.events.add("mouseleave", function (e) {
+          var element = document.getElementById(uniqueId);
+          element.style.display = "none";
+        });
+
+        myMap.geoObjects.add(myPlacemark);
+      }
+    </script>
+  </head>
+
+  <body>
+    <div id="map" style="width: 600px; height: 400px"></div>
+    <div class="info-block">
+      <p>Id:</p>
+      <p>Zakazlar:</p>
+      <p>Bakalashka:</p>
+      <a href="#">Detail</a>
+    </div>
+  </body>
+</html>
